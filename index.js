@@ -21,9 +21,9 @@ domready(() => {
   })
   var textureLoader = new THREE.TextureLoader();
 
-  textureLoader.load( "../assets/mars/polar_dunes/color.jpg" , function(color) {
-    textureLoader.load( "../assets/mars/polar_dunes/specular.jpg" , function(specular) {
-      textureLoader.load( "../assets/mars/polar_dunes/normal.jpg" , function(normal) {
+  textureLoader.load( "./assets/mars/polar_dunes/color.jpg" , function(color) {
+    textureLoader.load( "./assets/mars/polar_dunes/specular.jpg" , function(specular) {
+      textureLoader.load( "./assets/mars/polar_dunes/normal.jpg" , function(normal) {
         console.log('textures loaded')
         let tex = {
           color: color,
