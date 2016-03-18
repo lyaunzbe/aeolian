@@ -22,6 +22,8 @@ var Howl = Howler.Howl;
 export default function(opt, terrainPack) {
   let currentSound = null;
   let timeInCurrentMin;
+  var lastTimeSwitched = 0;
+
   // var hasUserMedia = navigator.webkitGetUserMedia ? true : false;
   // let webcam      = document.createElement('video');
   //
@@ -63,7 +65,6 @@ export default function(opt, terrainPack) {
 
   var composer;
 
-  var lastTimeSwitched = 0.0;
 
   let angle = 0,
 	speed = 0.02,
@@ -304,9 +305,9 @@ export default function(opt, terrainPack) {
 
     // vidTex.needsUpdate = true;
     // vidTex2.needsUpdate = true;
-
+    console.log(lastTimeSwitched)
     timeInCurrentMin = time.toFixed(0) > 60.0 ? (time.toFixed(0) - (Math.floor(time.toFixed(0)/60)*60)) : time.toFixed(0);
-    if (Math.round(timeInCurrentMin - lastTimeSwitched) === 20.0) {
+    if (Math.round(timeInCurrentMin - lastTimeSwitched) === 15.0) {
       nextTerrain();
     }
     // console.log(((mouseX+mouseY)/2));
@@ -349,7 +350,9 @@ export default function(opt, terrainPack) {
   }
 
   function setTerrain(tex, scene, camera){
-    lastTimeSwitched = timeInCurrentMin;
+    if (timeInCurrentMin){
+      lastTimeSwitched = timeInCurrentMin;
+    }
     if (currentSound) {
       currentSound.stop();
     }
