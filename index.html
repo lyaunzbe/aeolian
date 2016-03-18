@@ -4,8 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
   <title>aeolian</title>
+  <style media="screen">
+
+    .container{
+      /* give it dimensions */
+      height:576px;
+      width: 1024px;
+
+      margin: auto;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background-size: 1024px 576px;
+      border: 8px solid black;
+      border-radius:1px;
+      -webkit-box-shadow:inset 0px 0px 0px 15px rgba(1,1,0,0.25);
+      -moz-box-shadow:inset 0px 0px 0px 15px  rgba(1,1,0,0.25);
+      box-shadow:inset 0px 0px 0px 15px  rgba(1,1,0,0.25);
+
+    }
+    .wrapper {
+      height:576px;
+      width: 1024px;
+
+      margin: auto;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      border:12.5px double black;
+      padding:50px;
+      border-radius:0px;
+      box-shadow: 0px 8px 20px #888888;
+
+    }
+  </style>
 </head>
 <body>
+  <div class="wrapper" id="wrapper">
+
+  <div class="container" id="container">
+
+  </div>
+  </div>
+
   <script src="bundle.js"></script>
 </body>
 </html>

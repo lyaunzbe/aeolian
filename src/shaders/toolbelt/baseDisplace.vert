@@ -215,7 +215,7 @@ void main() {
     // get a turbulent 3d noise using the normal, normal to high freq
     noise = 10.0 *  -.10 * turbulence( .5 * normal + time );
     float b = 10.5 * pnoise( 0.03 * position + vec3( 3.5 * time ), vec3( 100.0 ) );
-    float displacement = brightness*80.0;
+    float displacement = brightness*10.0*b;
 
 
     vec3 newPosition = position + normal * displacement;

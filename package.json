@@ -9,6 +9,7 @@
     "url": "https://github.com/lyaunzbe"
   },
   "dependencies": {
+    "async": "^1.5.2",
     "canvas-fit": "^1.4.0",
     "domready": "^1.0.7",
     "eases": "^1.0.6",
@@ -17,9 +18,12 @@
     "glsl-noise": "0.0.0",
     "glslify-hex": "^2.0.1",
     "glslify-import": "0.0.1",
+    "howler": "^1.1.29",
     "load-json-xhr": "^3.0.1",
+    "lodash": "^4.5.0",
     "object-assign": "^2.0.0",
     "p5": "^0.4.17",
+    "postprocessing": "^1.0.2",
     "raf-loop": "^1.0.1",
     "three": "^0.73.0",
     "three-orbit-controls": "^69.0.4",

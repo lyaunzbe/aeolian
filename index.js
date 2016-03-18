@@ -9,39 +9,84 @@ import domready from 'domready'
 import viewer from './src/viewer'
 import assign from 'object-assign'
 import loadVideo from './src/load-video'
+import terrain from './src/terrain'
+
+const textureLoader = new THREE.TextureLoader();
+
+const terrainPack = terrain();
 
 domready(() => {
 
   assign(document.body.style, {
-    background: '#000',
+    background: 'white',
     overflow: 'hidden',
     margin: 0,
-    'background-image': 'url("assets/cloudy.gif")',
-    'background-size': 'cover'
   })
-  var textureLoader = new THREE.TextureLoader();
 
-  textureLoader.load( "./assets/mars/polar_dunes/color.jpg" , function(color) {
-    textureLoader.load( "./assets/mars/polar_dunes/specular.jpg" , function(specular) {
-      textureLoader.load( "./assets/mars/polar_dunes/normal.jpg" , function(normal) {
-        console.log('textures loaded')
-        let tex = {
-          color: color,
-          specular: specular,
-          normal: normal
-        }
-        const app = viewer({
-          alpha: true,
-          preserveDrawingBuffer: false,
-          antialias: true
-        }, tex);
 
-        document.body.appendChild(app.canvas);
-        app.start();
-      })
-    })
-  })
+  loadTextures().then(function (texPack) {
+    console.log(texPack)
+    const app = viewer({
+      alpha: true,
+      preserveDrawingBuffer: false,
+      antialias: true
+    }, texPack);
+
+    document.getElementById('container').appendChild(app.canvas);
+    app.start();
+  });
+
+
 
 
 
 })
+
+function loadTextures(){
+  return new Promise((resolve, reject) => {
+    var textureLoaderPromises = [];
+    terrainPack.forEach(function (terrainObject, index) {
+      let terrainName = Object.keys(terrainObject)[0],
+          terrain = terrainObject[terrainName];
+
+      let textureLoaderPromise = new Promise((resolveB, reject) => {
+        textureLoader.load(terrain.color , function(color) {
+          textureLoader.load(terrain.bump , function(bump) {
+            textureLoader.load(terrain.specular , function(specular) {
+              textureLoader.load(terrain.normal , function(normal) {
+                terrainPack[index][terrainName].color = color;
+                terrainPack[index][terrainName].bump = bump;
+                terrainPack[index][terrainName].specular = specular;
+                terrainPack[index][terrainName].normal = normal;
+
+                terrainPack[index][terrainName].color.generateMipmaps = false;
+                terrainPack[index][terrainName].bump.generateMipmaps = false;
+                terrainPack[index][terrainName].specular.generateMipmaps = false;
+                terrainPack[index][terrainName].normal.generateMipmaps = false;
+
+                terrainPack[index][terrainName].color.magFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].color.minFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].bump.magFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].bump.minFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].specular.magFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].specular.minFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].normal.magFilter = THREE.LinearFilter;
+                terrainPack[index][terrainName].normal.minFilter = THREE.LinearFilter;
+
+                terrainPack[index][terrainName].name = terrainName;
+
+
+                return resolveB(terrainPack[index][terrainName]);
+              });
+            });
+          });
+        });
+      });
+      textureLoaderPromises.push(textureLoaderPromise);
+    })
+
+    return Promise.all(textureLoaderPromises).then(function (result) {
+      return resolve(result);
+    })
+  })
+}
