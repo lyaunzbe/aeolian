@@ -305,7 +305,7 @@ export default function(opt, terrainPack) {
 
     // vidTex.needsUpdate = true;
     // vidTex2.needsUpdate = true;
-    console.log(lastTimeSwitched)
+    // console.log(lastTimeSwitched)
     timeInCurrentMin = time.toFixed(0) > 60.0 ? (time.toFixed(0) - (Math.floor(time.toFixed(0)/60)*60)) : time.toFixed(0);
     if (Math.round(timeInCurrentMin - lastTimeSwitched) > 15) {
       nextTerrain();
