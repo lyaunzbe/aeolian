@@ -43,7 +43,7 @@
     "watchify": "^3.1.1"
   },
   "scripts": {
-    "build": "browserify index.js -t babelify -t glslify | uglifyjs -cm > bundle.js",
+    "build": "browserify index.js -t babelify -t glslify > bundle.js",
     "start": "budo index.js:bundle.js --live -v -t babelify -t glslify -p errorify | garnish"
   },
   "glslify": {

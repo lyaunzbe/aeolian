@@ -21,6 +21,7 @@ var Howl = Howler.Howl;
 
 export default function(opt, terrainPack) {
   let currentSound = null;
+  let timeInCurrentMin;
   // var hasUserMedia = navigator.webkitGetUserMedia ? true : false;
   // let webcam      = document.createElement('video');
   //
@@ -62,6 +63,7 @@ export default function(opt, terrainPack) {
 
   var composer;
 
+  var lastTimeSwitched = 0.0;
 
   let angle = 0,
 	speed = 0.02,
@@ -132,26 +134,29 @@ export default function(opt, terrainPack) {
 
   }
   function nextTerrain() {
-    if (terrainIndex < 3) {
+    if (terrainIndex < 2) {
       terrainIndex++;
-      let terrain = terrainPack[terrainIndex];
-      terrainName = terrain.name;
-      setTerrain(terrain, scene, camera);
-      setPost();
+    } else {
+      terrainIndex = 0;
     }
+
+    let terrain = terrainPack[terrainIndex];
+    terrainName = terrain.name;
+    setTerrain(terrain, scene, camera);
+    setPost();
   }
   function prevTerrain() {
     if (terrainIndex > 0) {
       terrainIndex--;
-      let terrain = terrainPack[terrainIndex];
-      terrainName = terrain.name;
-      setTerrain(terrain, scene, camera);
-      setPost();
+    } else {
+      terrainIndex = 2;
     }
-
+    let terrain = terrainPack[terrainIndex];
+    terrainName = terrain.name;
+    setTerrain(terrain, scene, camera);
+    setPost();
   }
   function init () {
-    console.log('y')
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 100000 );
@@ -256,7 +261,6 @@ export default function(opt, terrainPack) {
 
     } else if (terrainName === 'sand_lines') {
 
-      console.log(composer)
       composer.addPass(renderPass);
       var filmPass = new FilmPass({
     		grayscale: false,
@@ -294,7 +298,6 @@ export default function(opt, terrainPack) {
 
   function draw () {
     app.emit('render')
-
     time += 0.01;
     // console.log(time);
 
@@ -302,7 +305,10 @@ export default function(opt, terrainPack) {
     // vidTex.needsUpdate = true;
     // vidTex2.needsUpdate = true;
 
-    let timeInCurrentMin = time.toFixed(0) > 60.0 ? (time.toFixed(0) - (Math.floor(time.toFixed(0)/60)*60)) : time.toFixed(0);
+    timeInCurrentMin = time.toFixed(0) > 60.0 ? (time.toFixed(0) - (Math.floor(time.toFixed(0)/60)*60)) : time.toFixed(0);
+    if (Math.round(timeInCurrentMin - lastTimeSwitched) === 20.0) {
+      nextTerrain();
+    }
     // console.log(((mouseX+mouseY)/2));
     // texturePlane.material.displacementScale = 10 + (Math.sin(time)*150);
     // texturePlane2.material.displacementScale = 10 + -(Math.sin(time)*150);
@@ -343,14 +349,14 @@ export default function(opt, terrainPack) {
   }
 
   function setTerrain(tex, scene, camera){
+    lastTimeSwitched = timeInCurrentMin;
     if (currentSound) {
-      console.log(currentSound);
       currentSound.stop();
     }
     currentSound = new Howl({
       urls: [tex.sound],
       loop: true,
-      volume: 0.5
+      volume: 1.0
     });
     currentSound.play();
     if (texturePlane) {
